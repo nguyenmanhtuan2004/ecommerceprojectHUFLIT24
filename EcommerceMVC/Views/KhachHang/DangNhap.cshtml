@@ -1,0 +1,32 @@
+﻿@model EcommerceMVC.Models.ViewModels.LoginVM
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+<div class="container py-5">
+    <h1 class="mb-4 text-primary fw-bold">Đăng nhập Thành viên</h1>
+    <form asp-action="DangNhap" asp-route-returnurl="@ViewBag.ReturnUrl">
+        <div class="text-danger" asp-validation-summary="All"></div>
+        <div class="row ">
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-item w-100">
+                        <label asp-for="@Model.UserName" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                        <input asp-for="@Model.UserName" type="text" class="form-control">
+                        <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-item w-100">
+                        <label asp-for="@Model.Password" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                        <input asp-for="@Model.Password" type="text" class="form-control">
+                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                <button type="submit" class="btn border-secondary py-2 px-3 text-uppercase w-100 text-white" style="background-color:#B22222">Đăng Nhập</button>
+                <a asp-controller="KhachHang" asp-action="QuenMatKhau" class="btn border-secondary py-2 px-3 text-uppercase w-100 text-white" style="background-color:#B22222">Quên mật khẩu</a>
+            </div>
+        </div>
+    </form>
+</div>
