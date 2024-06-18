@@ -85,56 +85,58 @@ namespace EcommerceMVC.Controllers
         [HttpPost]
         public IActionResult Checkout(CheckoutVM model)
         {
-            if (Cart.Count == 0)
+            if (ModelState.IsValid)
             {
-                //HttpContext.User đại diện cho người dùng hiện đang được xác thực
-                var customerId =HttpContext.User.Claims.SingleOrDefault(p => p.Type == MySetting.CLAIM_CUSTOMERID).Value;
+                var customerId = HttpContext.User.Claims.SingleOrDefault(p => p.Type == MySetting.CLAIM_CUSTOMERID).Value;
                 var khachHang = new KhachHang();
-                if(model.GiongKhachHang)
+                if (model.GiongKhachHang)
                 {
-                    khachHang=db.KhachHangs.SingleOrDefault(kh=>kh.MaKh==customerId);
-                }    
-                var hoaDon=new HoaDon
+                    khachHang = db.KhachHangs.SingleOrDefault(kh => kh.MaKh == customerId);
+                }
+
+                var hoadon = new HoaDon
                 {
-                    MaKh=customerId,
-                    HoTen=model.HoTen?? khachHang.HoTen,//nếu null thì mặc định lấy họ tên KhachHang
-                    DiaChi=model.DiaChi??khachHang.DiaChi,// nếu null thì mặc định lấy địa chỉ KhachHang
+                    MaKh = customerId,
+                    HoTen = model.HoTen ?? khachHang.HoTen,
+                    DiaChi = model.DiaChi ?? khachHang.DiaChi,
                     DienThoai = model.DienThoai ?? khachHang.DienThoai,
-                    NgayDat=DateTime.Now,
-                    CachThanhToan="COD",
-                    CachVanChuyen="GRAB",
-                    MaTrangThai=0,
-                    GhiChu=model.GhiChu
+                    NgayDat = DateTime.Now,
+                    CachThanhToan = "COD",
+                    CachVanChuyen = "GRAB",
+                    MaTrangThai = 0,
+                    GhiChu = model.GhiChu
                 };
-                
+
+                db.Database.BeginTransaction();
                 try
                 {
-                    db.Database.BeginTransaction();
-                    db.Add(hoaDon);//
+                    db.Database.CommitTransaction();
+                    db.Add(hoadon);
                     db.SaveChanges();
 
-                    //chi tiết hóa đơn
-                    var cthd=new List<ChiTietHd>();
-                    foreach(var item in Cart)
+                    var cthds = new List<ChiTietHd>();
+                    foreach (var item in Cart)
                     {
-                        cthd.Add(new ChiTietHd
+                        cthds.Add(new ChiTietHd
                         {
-                            MaHd=hoaDon.MaHd,
-                            SoLuong=item.SoLuong,
-                            DonGia=item.DonGia,
-                            MaHh=item.MaHh,
-                            GiamGia=0
+                            MaHd = hoadon.MaHd,
+                            SoLuong = item.SoLuong,
+                            DonGia = item.DonGia,
+                            MaHh = item.MaHh,
+                            GiamGia = 0
                         });
                     }
+                    db.AddRange(cthds);
                     db.SaveChanges();
-                    HttpContext.Session.Set<List<CartItem>>(MySetting.CART_KEY,new List<CartItem>());//thiết lập session là List rỗng sau khi thanh toán
+
+                    HttpContext.Session.Set<List<CartItem>>(MySetting.CART_KEY, new List<CartItem>());
+
                     return View("Success");
                 }
-                catch (Exception ex)
+                catch
                 {
-                    db.Database.CommitTransaction();
+                    db.Database.RollbackTransaction();
                 }
-
             }
 
             return View(Cart);
