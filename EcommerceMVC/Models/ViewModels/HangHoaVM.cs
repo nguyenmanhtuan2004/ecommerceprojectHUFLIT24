@@ -9,8 +9,13 @@ namespace EcommerceMVC.ViewModels
     {
         public int MaHh { get; set;}
         public string TenHH { get; set;}
+        public int MaLoai { get; set;}
         public string Hinh { get; set;}
         public double DonGia { get; set;}
+        public DateTime NgaySx { get; set;}
+        public double GiamGia { get; set; }
+        public int SoLanXem { get; set; }
+        public string MaNcc { get; set; }
         public string MoTaNgan { get; set;}
         public string TenLoai { get; set;}
     }

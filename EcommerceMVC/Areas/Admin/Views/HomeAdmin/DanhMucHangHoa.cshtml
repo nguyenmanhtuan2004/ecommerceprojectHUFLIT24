@@ -1,0 +1,65 @@
+﻿@model IEnumerable<EcommerceMVC.ViewModels.HangHoaVM>
+@{
+    ViewData["Title"] = "Danh mục hàng hóa";
+}
+
+<h2 class="text-primary fw-bold">Danh mục các hàng hóa</h2>
+<p>
+    <a class="btn btn-primary text-white" asp-action="ThemSanPhamMoi">Thêm hàng hóa mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr class="table-warning">
+            <th class="text-primary fw-bold">
+                @Html.DisplayNameFor(model => model.TenHH)
+            </th>
+            <th class="text-primary fw-bold">
+                @Html.DisplayNameFor(model => model.Hinh)
+            </th>
+            <th class="text-primary fw-bold">
+                @Html.DisplayNameFor(model => model.TenLoai)
+            </th>
+            <th class="text-primary fw-bold">
+                @Html.DisplayNameFor(model => model.DonGia)
+            </th>
+            <th class="text-primary fw-bold">
+                Chức năng
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 0;
+
+        }
+        @foreach (var item in Model)
+        {
+            i = i + 1;
+            string cls = "table-success";
+            if (i % 2 == 0)
+            {
+                cls = "table-secondary";
+            }
+            <tr class="@cls">
+                <td class="text-primary">
+                    @Html.DisplayFor(modelItem => item.TenHH)
+                </td>
+                <td class="text-primary">
+                    <img class="img-thumbnail" style="width:6rem" src="~/Hinh/HangHoa/@item.Hinh" />
+                </td>
+                <td class="text-primary">
+                    @Html.DisplayFor(modelItem => item.TenLoai)
+                </td>
+                <td class="text-primary">
+                    @Html.DisplayFor(modelItem => item.DonGia)
+                </td>
+                <td>
+                    <a class="m-1 btn btn-primary text-white" asp-action="Edit" asp-route-id="@item.MaHh">Sửa</a>
+                    <a class="m-1 btn btn-primary text-white" asp-action="Details" asp-route-id="@item.MaHh">Chi Tiết</a>
+                    <a class="m-1 btn btn-primary text-white" asp-action="Delete" asp-route-id="@item.MaHh">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

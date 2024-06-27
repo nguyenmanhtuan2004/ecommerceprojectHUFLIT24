@@ -1,0 +1,67 @@
+﻿@model EcommerceMVC.ViewModels.HangHoaVM
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm mới";
+}
+
+<h1>Thêm sản phẩm mới</h1>
+
+<div class="container py-5">
+    <h1 class="mb-4 text-primary fw-bold">Thêm mới sản phẩm</h1>
+    <form asp-action="ThemSanPhamMoi" enctype="multipart/form-data">
+        <div class="row">
+            <div class="form-item w-100">
+                <label asp-for="TenHH" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                <input asp-for="TenHH" class="form-control">
+                <span asp-validation-for="TenHH" class="text-danger"></span>
+            </div>
+            <div class="form-item w-100">
+                <label asp-for="MaLoai" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                <select asp-for="MaLoai" class="form-control">
+                    <option value="1000">Đồng hồ</option>
+                    <option value="1004">Nước hoa</option>
+                    <option value="1005">Trang sức</option>
+                    <option value="1006">Giày</option>
+                    <option value="1008">Quần</option>
+                    <option value="1009">Áo</option>
+                </select>
+                <span asp-validation-for="MaLoai" class="text-danger"></span>
+            </div>
+            <div class="form-item w-100">
+                <label asp-for="DonGia" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                <input asp-for="DonGia" type="number" class="form-control">
+                <span asp-validation-for="DonGia" class="text-danger"></span>
+            </div>
+            <div class="form-item w-100">
+                <label asp-for="NgaySx" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                <input asp-for="NgaySx" type="datetime-local" class="form-control">
+                <span asp-validation-for="NgaySx" class="text-danger"></span>
+            </div>
+            <div class="form-item w-100">
+                <label asp-for="GiamGia" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                <input asp-for="GiamGia" type="number" class="form-control">
+                <span asp-validation-for="GiamGia" class="text-danger"></span>
+            </div>
+            <div class="form-item w-100">
+                <label asp-for="SoLanXem" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                <input asp-for="SoLanXem" type="number" class="form-control">
+                <span asp-validation-for="SoLanXem" class="text-danger"></span>
+            </div>
+            <div class="form-item w-100">
+                <label asp-for="MaNcc" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                <select asp-for="MaNcc" class="form-control">
+                    <option value="AP">Chanel</option>
+                    <option value="MO">Louis Vuitton</option>
+                    <option value="NK">Gucci</option>
+                    <option value="SM">Dior</option>
+                    <option value="SS">Versace</option>
+                </select>
+                <span asp-validation-for="MaNcc" class="text-danger"></span>
+            </div>
+            <div class="col-12 text-center mt-4">
+                <input type="submit" value="Thêm" class="btn btn-primary text-white" />
+            </div>
+        </div>
+    </form>
+</div>
+
