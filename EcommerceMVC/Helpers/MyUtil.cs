@@ -10,7 +10,11 @@ namespace EcommerceMVC.Helpers
             {
                 //GetCurrentDirectory địa chỉ project hiện tại của mình
                 var fullpath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Hinh", folder, Hinh.FileName);
-                using (var myfile = new FileStream(fullpath, FileMode.CreateNew))
+                if (File.Exists(fullpath))
+                {
+                    return Hinh.FileName;
+                }
+                using (var myfile = new FileStream(fullpath, FileMode.Truncate))
                 {
                     Hinh.CopyTo(myfile);
                 }
@@ -22,6 +26,7 @@ namespace EcommerceMVC.Helpers
             }
 
         }
+       
         public static string GenerateRandomKey(int length = 5)
         {
             var pattern = @"dfhldladsfhlkldsaksfdhADFHKLAJDFLSDFKLDHLSFHLSF?><!";

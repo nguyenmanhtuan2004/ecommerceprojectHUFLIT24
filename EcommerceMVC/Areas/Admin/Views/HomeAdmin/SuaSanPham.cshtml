@@ -1,12 +1,12 @@
 ﻿@model EcommerceMVC.Areas.Admin.Models.ViewModels.HangHoaThemVM
 
 @{
-    ViewData["Title"] = "Thêm sản phẩm mới";
+    ViewData["Title"] = "Sửa Sản Phẩm";
 }
 
 <div class="container py-5">
-    <h1 class="mb-4 text-primary fw-bold">Thêm mới sản phẩm</h1>
-    <form asp-action="ThemSanPhamMoi" method="post" enctype="multipart/form-data">
+    <h1 class="mb-4 text-primary fw-bold">Sửa sản phẩm</h1>
+    <form asp-action="SuaSanPham" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="form-item w-100">
                 <label asp-for="TenHH" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
@@ -59,12 +59,10 @@
             <div class="form-item w-100">
                 <label asp-for="MyImage" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
                 <input asp-for="MyImage" type="file" class="form-control">
-                <span asp-validation-for="MyImage" class="text-danger"></span>
             </div>
             <div class="col-12 text-center mt-4">
-                <input type="submit" value="Thêm" class="btn btn-primary text-white" />
-            </div> 
+                <input asp-route-MaHh="@ViewBag.MaHh" type="submit" value="Sửa" class="btn btn-primary text-white" />
+            </div>
         </div>
     </form>
 </div>
-
