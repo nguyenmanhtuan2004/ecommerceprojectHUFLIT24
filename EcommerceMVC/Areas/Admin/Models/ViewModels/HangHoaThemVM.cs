@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -27,3 +28,4 @@ namespace EcommerceMVC.Areas.Admin.Models.ViewModels
         public IFormFile? MyImage { set; get; }
     }
 }
+

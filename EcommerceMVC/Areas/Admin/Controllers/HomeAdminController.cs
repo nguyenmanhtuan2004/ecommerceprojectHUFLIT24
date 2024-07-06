@@ -11,6 +11,9 @@ using Microsoft.Extensions.Hosting;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static NuGet.Packaging.PackagingConstants;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace EcommerceMVC.Areas.Admin.Controllers
 {
@@ -19,18 +22,14 @@ namespace EcommerceMVC.Areas.Admin.Controllers
     public class HomeAdminController : Controller
     {
         private readonly Hshop2023Context db;
-        public HomeAdminController(Hshop2023Context context)
+        private SignInManager<IdentityUser> signInManager;
+        public HomeAdminController(Hshop2023Context context, SignInManager<IdentityUser> signInMgr)
         {
             db = context;
+            signInManager = signInMgr;
         }
 
-       
-        [Route("")]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
+        [Authorize]
         [Route("danhmuchanghoa")]
         public IActionResult DanhMucHangHoa(int? loai)
         {
@@ -49,7 +48,26 @@ namespace EcommerceMVC.Areas.Admin.Controllers
             });
             return View(result);
         }
+        [Route("search")]
+        public IActionResult Search(string? query)
+        {
+            var hangHoas = db.HangHoas.AsQueryable();
+            if (query != null)
+            {
+                var hangHoa = hangHoas.Where(x => x.TenHh.Contains(query));
+            }
+            var result = hangHoas.Select(p => new HangHoaThemVM
+            {
+                MaHh = p.MaHh,
+                TenHH = p.TenHh,
+                DonGia = p.DonGia ?? 0,
+                Hinh = p.Hinh ?? "",
+                TenLoai = p.MaLoaiNavigation.TenLoai
+            });
 
+            return View(result);
+        }
+        [Authorize]
         [Route("ThemSanPhamMoi")]
         [HttpGet]
         public IActionResult ThemSanPhamMoi()
@@ -64,18 +82,18 @@ namespace EcommerceMVC.Areas.Admin.Controllers
             {
                 var hanghoa = new HangHoa
                 {
-                    TenHh=model.TenHH??"",
-                    MaLoai=model.MaLoai,
-                    DonGia=model.DonGia,
-                    NgaySx=model.NgaySx,
-                    GiamGia=model.GiamGia,
-                    SoLanXem=model.SoLanXem,
-                    MaNcc=model.MaNcc,
+                    TenHh = model.TenHH ?? "",
+                    MaLoai = model.MaLoai,
+                    DonGia = model.DonGia,
+                    NgaySx = model.NgaySx,
+                    GiamGia = model.GiamGia,
+                    SoLanXem = model.SoLanXem,
+                    MaNcc = model.MaNcc,
                 };
-        
+
                 if (model.MyImage != null)
                 {
-                    hanghoa.Hinh = MyUtil.UploadHinh(model.MyImage,"HangHoa");
+                    hanghoa.Hinh = MyUtil.UploadHinh(model.MyImage, "HangHoa");
                 }
 
                 db.Add(hanghoa);
@@ -84,20 +102,20 @@ namespace EcommerceMVC.Areas.Admin.Controllers
             }
             return View(model);
         }
-
+        [Authorize]
         [Route("SuaSanPham")]
         [HttpGet]
         public IActionResult SuaSanPham(int MaHh)
         {
             ViewBag.MaHh = MaHh;
-            var hangHoa=db.HangHoas.Find(MaHh);
+            var hangHoa = db.HangHoas.Find(MaHh);
             if (hangHoa == null)
             {
                 return View();
-            }    
+            }
             var result = new HangHoaThemVM
             {
-                MaHh=MaHh,
+                MaHh = MaHh,
                 TenHH = hangHoa.TenHh,
                 MaLoai = hangHoa.MaLoai,
                 DonGia = hangHoa.DonGia,
@@ -105,22 +123,22 @@ namespace EcommerceMVC.Areas.Admin.Controllers
                 GiamGia = hangHoa.GiamGia,
                 SoLanXem = hangHoa.SoLanXem,
                 MaNcc = hangHoa.MaNcc,
-             
+
             };
 
             return View(result);
         }
         [HttpPost]
         [Route("SuaSanPham")]
-        public IActionResult SuaSanPham(HangHoaThemVM model,int MaHh)
+        public IActionResult SuaSanPham(HangHoaThemVM model, int MaHh)
         {
             if (ModelState.IsValid)
             {
-                var hangHoa=db.HangHoas.FirstOrDefault(x=>x.MaHh==MaHh);
-                if(hangHoa == null)
+                var hangHoa = db.HangHoas.FirstOrDefault(x => x.MaHh == MaHh);
+                if (hangHoa == null)
                 {
                     return View(model);
-                }    
+                }
                 hangHoa.TenHh = model.TenHH;
                 hangHoa.MaLoai = model.MaLoai;
                 hangHoa.DonGia = model.DonGia;
@@ -131,22 +149,22 @@ namespace EcommerceMVC.Areas.Admin.Controllers
 
                 if (model.MyImage != null)
                 {
-                    hangHoa.Hinh = MyUtil.UploadHinh(model.MyImage, "HangHoa");       
+                    hangHoa.Hinh = MyUtil.UploadHinh(model.MyImage, "HangHoa");
                 }
-                db.Entry(hangHoa).State=EntityState.Modified;
+                db.Entry(hangHoa).State = EntityState.Modified;
                 db.Update(hangHoa);
                 db.SaveChanges();
                 return RedirectToAction("DanhMucHangHoa");
             }
             return View(model);
         }
-
+        [Authorize]
         [HttpPost]
         [Route("XoaSanPham")]
         public IActionResult XoaSanPham(int id)
         {
-            var chitiethoadon = db.ChiTietHds.Where(x=>x.MaHh == id).ToList();
-            if (chitiethoadon.Count()>0)
+            var chitiethoadon = db.ChiTietHds.Where(x => x.MaHh == id).ToList();
+            if (chitiethoadon.Count() > 0)
             {
                 return RedirectToAction("DanhMucHangHoa");
             }
@@ -154,5 +172,6 @@ namespace EcommerceMVC.Areas.Admin.Controllers
             db.SaveChanges();
             return RedirectToAction("DanhMucHangHoa");
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿@model EcommerceMVC.Areas.Admin.Models.ViewModels.HangHoaThemVM
+﻿@using EcommerceMVC.Areas.Admin.Models.ViewModels;
+@model HangHoaThemVM
 
 @{
     ViewData["Title"] = "Thêm sản phẩm mới";
@@ -32,7 +33,7 @@
             </div>
             <div class="form-item w-100">
                 <label asp-for="NgaySx" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
-                <input asp-for="NgaySx" type="datetime" class="form-control">
+                <input asp-for="NgaySx" type="datetime-local" class="form-control">
                 <span asp-validation-for="NgaySx" class="text-danger"></span>
             </div>
             <div class="form-item w-100">

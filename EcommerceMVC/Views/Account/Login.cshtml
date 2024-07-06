@@ -4,7 +4,7 @@
 }
 <div class="container py-5">
     <h1 class="mb-4 text-primary fw-bold">Đăng nhập Thành viên</h1>
-    <form asp-action="DangNhap" asp-route-returnurl="@ViewBag.ReturnUrl">
+    <form asp-action="Login" asp-controller="Account" method="post">
         <div class="text-danger" asp-validation-summary="All"></div>
         <div class="row ">
             <div class="row">
@@ -25,7 +25,6 @@
             </div>
             <div class="col-12 text-center mt-4">
                 <button type="submit" class="btn border-secondary text-white" style="background-color:#B22222">Đăng Nhập</button>
-                <a asp-controller="KhachHang" asp-action="QuenMatKhau" class="btn border-secondary text-white" style="background-color:#B22222">Quên mật khẩu</a>
             </div>
         </div>
     </form>

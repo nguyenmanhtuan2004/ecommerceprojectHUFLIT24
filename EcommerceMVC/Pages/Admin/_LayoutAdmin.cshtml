@@ -1,9 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Mvc.Localization
-@using Microsoft.AspNetCore.Mvc.Razor
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
@@ -58,39 +53,12 @@
             </div>
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                    <h2 style="">Shop thời trang</h2>
+                    <h1 class="text-primary display-7">Shop thời trang</h1>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="fa fa-bars text-primary"></span>
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
-                            <a href="index.html" class="nav-item nav-link active">Home</a>
-                            <a asp-controller="HangHoa" asp-action="Index" class="nav-item nav-link">Shop</a>
-                              
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                <a asp-controller="Account" asp-action="DangKy" hidden class="nav-item nav-link">Đăng ký</a>
-                            }
-                            else
-                            {
-                                <a asp-controller="Account" asp-action="DangKy" class="nav-item nav-link">Đăng ký</a>
-                            }
-                            
-                        </div>
-                        <div class="d-flex m-2 me-0">
-                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4 hover-search-icon-text" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-secondary"></i></button>
-                            @await Component.InvokeAsync("Cart")
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                <a asp-controller="Account" asp-action="DangXuat" class="btn btn-primary text-white">Đăng xuất</a>
-                            }
-                            else
-                            {
-                                <a asp-action="Login" asp-controller="Account" class="my-auto">
-                                    <i class="fas fa-user fa-2x"></i>
-                                </a>
-                            }
-                            
                         </div>
                     </div>
                 </nav>
@@ -139,7 +107,7 @@
     <script>
         $(document).ready(function () {
             $("#searchButton").click(function(){
-                let url = '/HangHoa/Search?query=' + $("#searchText").val();
+                let url = '/admin/danhmuchanghoa/Search?query=' + $("#searchText").val();
                 window.location.href=url
             })
         });
