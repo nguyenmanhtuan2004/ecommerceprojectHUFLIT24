@@ -57,7 +57,7 @@
                 </td>
                 <td>
                     <a class="m-1 btn btn-primary text-white" asp-action="SuaSanPham" asp-route-MaHh="@item.MaHh">Sửa</a>
-                    <a class="m-1 btn btn-primary text-white" asp-action="Details" asp-route-id="@item.MaHh">Chi Tiết</a>
+                    <a class="m-1 btn btn-primary text-white" asp-action="ChiTiet" asp-route-id="@item.MaHh">Chi Tiết</a>
                     <form asp-action="XoaSanPham" method="post">
                         <input type="hidden" name="id" value="@item.MaHh" />
                         <button type="submit" class="m-1 btn btn-primary text-white">Xóa</button>

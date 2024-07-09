@@ -7,11 +7,12 @@
         <div class="rounded position-relative fruite-item">
             <div class="fruite-img">
                 <a asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.MaHh">
-                    <img src="~/Hinh/HangHoa/@item.Hinh" class="img-fluid w-100 rounded-top" alt="@item.TenHH">
+                    <img src="~/Hinh/HangHoa/@item.Hinh" class="img-fluid w-100 rounded-top" style="object-fit: cover;width: auto;
+    height: 200px;" alt="@item.TenHH">
                 </a>
             </div>
             <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">@item.TenLoai</div>
-            <div class="p-4 border border-secondary border-top-0 rounded-bottom">  
+            <div class="p-4 border border-secondary border-top-0 rounded-bottom" style="box-sizing: border-box;height:200px">
                 <a asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.MaHh">
                     <h4>@item.TenHH</h4>
                 </a>

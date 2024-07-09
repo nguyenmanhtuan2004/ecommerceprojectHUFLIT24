@@ -13,8 +13,11 @@ namespace EcommerceMVC.Areas.Admin.Models.ViewModels
         public string TenHH { get; set; }
         [DisplayName("Mã Loại")]
         public int MaLoai { get; set; }
+        [DisplayName("Tên Loại")]
         public string? TenLoai { get; set; }
+        [DisplayName("Hình")]
         public string? Hinh { get; set; }
+        [DisplayName("Đơn giá")]
         public double? DonGia { get; set; }
         [DisplayName("Ngày Sản Xuất")]
         public DateTime NgaySx { get; set; }

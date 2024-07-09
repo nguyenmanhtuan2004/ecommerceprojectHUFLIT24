@@ -1,0 +1,8 @@
+﻿@using EcommerceMVC.Areas.Admin.Models.ViewModels;
+@model IEnumerable<HangHoaThemVM>
+@{
+    ViewData["Title"] = "Search";
+}
+@* sử dụng PartialView chỗ này
+ *@
+@await Html.PartialAsync("DanhMucHangHoa", Model)

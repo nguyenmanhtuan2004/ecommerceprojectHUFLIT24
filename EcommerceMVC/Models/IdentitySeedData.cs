@@ -24,6 +24,7 @@ namespace EcommerceMVC.Models
                 user = new IdentityUser("Admin");
                 user.Email = "admin@example.com";
                 user.PhoneNumber = "555-1234";
+                await userManager.AddToRoleAsync(user, "Admin");
                 await userManager.CreateAsync(user, adminPassword);
             }
         }
