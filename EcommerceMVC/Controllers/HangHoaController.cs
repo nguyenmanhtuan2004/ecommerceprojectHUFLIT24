@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using EcommerceMVC.Models;
 using EcommerceMVC.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
+using X.PagedList.Mvc.Core;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace EcommerceMVC.Controllers
 {
     public class HangHoaController : Controller
@@ -13,12 +16,13 @@ namespace EcommerceMVC.Controllers
         {
             db=context;
         }
-        public IActionResult Index(int? loai)
+        public IActionResult Index(int? loai,int? page)
         {
+            
             var hangHoas=db.HangHoas.AsQueryable();
             if(loai.HasValue)
             {
-                hangHoas=hangHoas.Where(p => p.MaLoai==loai.Value);
+                hangHoas=hangHoas.Where(p => p.MaLoai==loai.Value).AsNoTracking().OrderBy(x=>x.TenHh);
             }
             var result =hangHoas.Select(p => new HangHoaVM
             {
@@ -27,9 +31,16 @@ namespace EcommerceMVC.Controllers
                 DonGia=p.DonGia??0,
                 Hinh=p.Hinh??"",
                 MoTaNgan=p.MoTaDonVi??"",
-                TenLoai=p.MaLoaiNavigation.TenLoai
+                TenLoai=p.MaLoaiNavigation.TenLoai,
+                
             });
-            return View(result);
+            int pageSize = 9;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            ViewBag.pageSize = hangHoas.Count()/pageSize;
+            ViewBag.pagenumber = pageNumber;
+
+            PagedList<HangHoaVM> lst=new PagedList<HangHoaVM>(result, pageNumber, pageSize);
+            return View(lst);
         }
         public IActionResult Search(string? query)
         {

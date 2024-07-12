@@ -64,7 +64,7 @@
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
-                            <a href="index.html" class="nav-item nav-link active">Home</a>
+                            <a asp-controller="Cart" asp-action="LichSuMuaHang" class="nav-item nav-link active">Lịch sử mua hàng</a>
                             <a asp-controller="HangHoa" asp-action="Index" class="nav-item nav-link">Shop</a>
                               
                             @if (SignInManager.IsSignedIn(User))
@@ -115,7 +115,7 @@
             </div>
         </div>
         <!-- Modal Search End -->
-        <div style="min-height:400px;" class="hero-header">
+        <div style="min-height:400px;" class="hero-header container rounded">
             @RenderBody()
         </div>
         @await Html.PartialAsync("_Footer")

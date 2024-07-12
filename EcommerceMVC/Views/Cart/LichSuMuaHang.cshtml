@@ -1,0 +1,34 @@
+﻿@using EcommerceMVC.Data
+@model IEnumerable<ChiTietHd>
+@{
+    ViewData["Title"] = "Lịch sử mua hàng";
+}
+<div class=" mt-5 rounded">
+    <h2 class="mb-4 text-primary">Lịch Sử Mua Hàng</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-primary">Tên Hàng hóa</th>
+                <th class="text-primary">Ngày đặt</th>
+                <th class="text-primary">Đơn giá</th>
+                <th class="text-primary">Số Lượng</th>
+                <th class="text-primary">Giảm giá</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+                @foreach(var item in Model)
+                {
+                   <tr>
+                        <td>@item.MaHhNavigation.TenHh</td>
+                        <td>@item.MaHdNavigation.NgayDat</td>
+                        <td>@item.DonGia</td>
+                        <td>@item.SoLuong</td>
+                        <td>@item.GiamGia</td>
+                   </tr>
+                }
+               
+            <!-- Thêm các dòng khác tương tự ở đây -->
+        </tbody>
+    </table>
+</div>

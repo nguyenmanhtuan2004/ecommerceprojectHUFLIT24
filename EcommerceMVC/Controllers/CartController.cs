@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using ECommerceMVC.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceMVC.Controllers
 {
@@ -67,6 +68,20 @@ namespace EcommerceMVC.Controllers
 			HttpContext.Session.Set(MySetting.CART_KEY, gioHang);
 			return RedirectToAction("Index");//chuyển tới index để hiển thị
 		}
+
+		public IActionResult Save(int id,int quantity = 1)
+		{
+            var gioHang = Cart;
+            gioHang.ForEach(cart => {
+                if (cart.MaHh==id)
+                {
+                    cart.SoLuong= quantity; // Giảm giá 10% cho các sản phẩm có số lượng lớn hơn 1
+                }
+            });
+            HttpContext.Session.Set(MySetting.CART_KEY, gioHang);
+            
+            return RedirectToAction("Index");
+        }
 		public IActionResult RemoveCart(int id)
 		{
 			//Tìm kiếm sản phẩm cần xóa(tham chiếu sản phẩm cần xóa)
@@ -104,8 +119,8 @@ namespace EcommerceMVC.Controllers
 				{
 					if(customerId==null)
 					{
-						
-					}	
+                        return View(Cart);
+                    }	
 					khachHang = db.KhachHangs.SingleOrDefault(kh => kh.MaKh == customerId);
 				}
 
@@ -155,6 +170,19 @@ namespace EcommerceMVC.Controllers
 			}
 
 			return View(Cart);
+		}
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult LichSuMuaHang()
+		{
+            var customerId = User.Identity.Name;
+            var chiTietHds = db.ChiTietHds
+           .Include(ct => ct.MaHhNavigation)
+           .Include(ct => ct.MaHdNavigation)
+		   .Where(ct=>ct.MaHdNavigation.MaKh==customerId)
+           .ToList();
+            return View(chiTietHds);
 		}
         
     }

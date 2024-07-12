@@ -14,6 +14,9 @@ using static NuGet.Packaging.PackagingConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System;
+using X.PagedList;
+using X.PagedList.Mvc.Core;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EcommerceMVC.Areas.Admin.Controllers
 {
@@ -31,12 +34,12 @@ namespace EcommerceMVC.Areas.Admin.Controllers
 
         [Authorize(Roles = "Admin")]
         [Route("danhmuchanghoa")]
-        public IActionResult DanhMucHangHoa(int? loai)
+        public IActionResult DanhMucHangHoa(int? loai,int? page)
         {
             var hangHoas = db.HangHoas.AsQueryable();
             if (loai.HasValue)
             {
-                hangHoas = hangHoas.Where(p => p.MaLoai == loai.Value);
+                hangHoas = hangHoas.Where(p => p.MaLoai == loai.Value).AsNoTracking().OrderBy(x => x.TenHh);
             }
             var result = hangHoas.Select(p => new HangHoaThemVM
             {
@@ -46,7 +49,12 @@ namespace EcommerceMVC.Areas.Admin.Controllers
                 Hinh = p.Hinh ?? "",
                 TenLoai = p.MaLoaiNavigation.TenLoai
             });
-            return View(result);
+            int pageSize = 9;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            ViewBag.pageSize = hangHoas.Count() / pageSize;
+            ViewBag.pagenumber = pageNumber;
+            PagedList<HangHoaThemVM> lst = new PagedList<HangHoaThemVM>(result, pageNumber, pageSize);
+            return View(lst);
         }
 
         [Authorize(Roles = "Admin")]
@@ -180,13 +188,14 @@ namespace EcommerceMVC.Areas.Admin.Controllers
         {
             var data = db.HangHoas
                 .Include(p => p.MaLoaiNavigation)
+                .Include(p => p.MaNccNavigation)
                 .SingleOrDefault(p => p.MaHh == id);
             if (data == null)
             {
                 TempData["Message"] = $"Không thấy sản phầm có mã {id}";
                 return Redirect("/404");
             }
-            var result = new HangHoaThemVM
+            /*var result = new HangHoaThemVM
             {
                 MaHh = id,
                 TenHH = data.TenHh,
@@ -198,8 +207,8 @@ namespace EcommerceMVC.Areas.Admin.Controllers
                 MaNcc = data.MaNcc,
                 Hinh=data.Hinh,
 
-            };
-            return View(result);
+            };*/
+            return View(data);
         }
 
     }

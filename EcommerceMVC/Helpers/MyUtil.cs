@@ -14,7 +14,8 @@ namespace EcommerceMVC.Helpers
                 {
                     return Hinh.FileName;
                 }
-                using (var myfile = new FileStream(fullpath, FileMode.Truncate))
+
+                using (var myfile = new FileStream(fullpath, FileMode.Create))
                 {
                     Hinh.CopyTo(myfile);
                 }

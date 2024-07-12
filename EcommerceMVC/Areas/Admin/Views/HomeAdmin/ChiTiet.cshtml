@@ -1,21 +1,42 @@
-﻿@using EcommerceMVC.Areas.Admin.Models.ViewModels;
-@model HangHoaThemVM
+﻿@using EcommerceMVC.Data;
+@model HangHoa
 @{
     ViewData["Title"] = "Chi tiết";
 }
-
-<table class="table table-sm table-striped table-bordered table-secondary">
+<div></div>
+<h2 class="text-primary" style="margin-top:4px">Chi tiết</h2>
+<table class="table table-sm table-striped table-bordered">
     <tbody>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.TenHH)</th>
-            <td class="text-primary">@Model.TenHH</td>
+            <th class="text-primary">Tên hàng hóa</th>
+            <td class="text-primary">@Model.TenHh</td>
         </tr>
         <tr>
-            <th> @Html.DisplayNameFor(model => model.MaLoai)</th>
-            <td class="text-primary">@Model.MaLoai</td>
+            <th class="text-primary">Tên loại</th>
+            <td class="text-primary">@Model.MaLoaiNavigation.TenLoai</td>
         </tr>
         <tr>
-            <th>Phone</th>
+            <th class="text-primary">Tên công ty</th>
+            <td class="text-primary">@Model.MaNccNavigation.TenCongTy</td>
+        </tr>
+        <tr>
+            <th class="text-primary">Đơn giá</th>
+            <td class="text-primary">@Model.DonGia</td>
+        </tr>
+        <tr>
+            <th class="text-primary">Ngày sản xuất</th>
+            <td class="text-primary">@Model.NgaySx</td>
+        </tr>
+        <tr>
+            <th class="text-primary">Số lần xem</th>
+            <td class="text-primary">@Model.SoLanXem</td>
+        </tr>
+        <tr>
+            <th class="text-primary">Giảm giá</th>
+            <td class="text-primary">@Model.GiamGia</td>
+        </tr>
+        <tr>
+            <th class="text-primary">Hình</th>
             <td class="text-primary">
                 <img class="img-thumbnail" style="width:6rem" src="~/Hinh/HangHoa/@Model.Hinh" />
             </td>

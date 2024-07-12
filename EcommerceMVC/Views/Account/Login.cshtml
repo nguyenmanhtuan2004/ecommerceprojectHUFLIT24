@@ -8,7 +8,7 @@
         <div class="text-danger" asp-validation-summary="All"></div>
         <div class="row ">
             <div class="row">
-                <div class="col-md-12 col-lg-6">
+               @*  <div class="col-md-12 col-lg-6">
                     <div class="form-item w-100">
                         <label asp-for="@Model.UserName" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
                         <input asp-for="@Model.UserName" type="text" class="form-control">
@@ -21,6 +21,17 @@
                         <input asp-for="@Model.Password" type="text" class="form-control">
                         <span asp-validation-for="@Model.Password" class="text-danger"></span>
                     </div>
+                </div> *@
+
+                <div class="form-item">
+                    <label asp-for="@Model.UserName" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                    <input asp-for="@Model.UserName" type="text" class="form-control">
+                    <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                </div>
+                <div class="form-item">
+                    <label asp-for="@Model.Password" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
+                    <input asp-for="@Model.Password" type="text" class="form-control">
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-12 text-center mt-4">

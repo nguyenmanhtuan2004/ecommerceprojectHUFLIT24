@@ -58,7 +58,9 @@
                         <span class="fa fa-bars text-primary"></span>
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                        <div class="navbar-nav mx-auto">
+                        <div class="navbar-nav mx-5">
+                            <a href="/admin" class="nav-item nav-link active">Trang chủ</a>
+                            <a href="/admin/danhmuchanghoa" class="nav-item nav-link active">Danh mục hàng hóa</a>
                         </div>
                     </div>
                 </nav>
@@ -83,7 +85,7 @@
             </div>
         </div>
         <!-- Modal Search End -->
-        <div style="min-height:400px;" class="hero-header">
+        <div style="min-height:400px;" class="hero-header container rounded">
             @RenderBody()
         </div>
         @await Html.PartialAsync("_Footer")

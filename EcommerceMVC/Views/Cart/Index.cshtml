@@ -46,20 +46,27 @@
                         <td>
                             <p class="mb-0 mt-4">@item.DonGia $</p>
                         </td>
+
                         <td>
-                            <div class="input-group quantity mt-4" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                        <i class="fa fa-minus"></i>
+                                <form asp-action="Save" asp-controller="Cart" asp-route-id="@item.MaHh">
+                                    <div class="input-group quantity mt-2" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" type="button">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm text-center border-0" value="@item.SoLuong" name="quantity">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border" type="button">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button class="btn border border-secondary rounded-pill px-4 py-2 mt-2 text-primary">
+                                        <i class="fa fa-shopping-bag me-2 text-secondary"></i>
+                                        Lưu
                                     </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm text-center border-0" value="@item.SoLuong">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
+                                </form>
                         </td>
                         <td>
                             <p class="mb-0 mt-4">@item.ThanhTien $</p>
@@ -69,9 +76,8 @@
                                 <i class="fa fa-times text-danger"></i>
                             </a>
                         </td>
-
                     </tr>
-                    }  
+                    }    
                 </tbody>
             </table>
         </div>
