@@ -51,7 +51,7 @@ namespace EcommerceMVC.Areas.Admin.Controllers
             });
             int pageSize = 9;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
-            ViewBag.pageSize = hangHoas.Count() / pageSize;
+            ViewBag.pageSize = (hangHoas.Count() / pageSize)+1;
             ViewBag.pagenumber = pageNumber;
             PagedList<HangHoaThemVM> lst = new PagedList<HangHoaThemVM>(result, pageNumber, pageSize);
             return View(lst);

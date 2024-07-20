@@ -52,7 +52,18 @@ namespace EcommerceMVC.Controllers
                    
                     db.Add(khachHang);
                     db.SaveChanges();//chức năng thêm khách hàng
-                    return RedirectToAction("Index", "HangHoa");
+                    IdentityUser newUser = new() { UserName = model.MaKh, Email = model.Email };
+                    IdentityResult result = await userManager.CreateAsync(newUser, model.MatKhau);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(newUser, "Customer");
+                        return RedirectToAction("Index", "HangHoa");
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                   /* return RedirectToAction("Index", "HangHoa");*/
                 }
                 catch (Exception ex)
                 {
@@ -60,17 +71,7 @@ namespace EcommerceMVC.Controllers
                 }
 
 
-                IdentityUser newUser = new() { UserName = model.MaKh, Email = model.Email };
-                IdentityResult result = await userManager.CreateAsync(newUser,model.MatKhau);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(newUser, "Customer");
-                    return RedirectToAction("Index", "HangHoa");
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
+               
 
             }
             return View();

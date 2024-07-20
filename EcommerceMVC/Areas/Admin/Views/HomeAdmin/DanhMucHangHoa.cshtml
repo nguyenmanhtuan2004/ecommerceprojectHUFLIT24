@@ -71,7 +71,7 @@
     </table>
     <div class="col-12">
         <div class="pagination d-flex justify-content-center mt-5">
-            @for (int a = 1; a <= ViewBag.pageSize; a++)
+            @for (var a = 1; a <= ViewBag.pageSize; a++)
             {
 
                 if (a == ViewBag.pagenumber)
@@ -80,7 +80,7 @@
                 }
                 else
                 {
-                    <a   href="?page=@a" class="rounded">@a</a>
+                    <a href="?page=@a" class="rounded">@a</a>
                 }
             }
         </div>

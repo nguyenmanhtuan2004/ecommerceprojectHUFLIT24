@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using EcommerceMVC.Models;
 using ECommerceMVC.Helpers;
+using EcommerceMVC.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -57,6 +58,7 @@ builder.Services.AddSingleton(x => new PaypalClient(
     builder.Configuration["PaypalOptions:ClientSecret"],
     builder.Configuration["PaypalOptions:Mode"]
     ));
+builder.Services.AddSingleton<IVnPayService, VnPayService>();
 var app = builder.Build();
 
 //seed roles

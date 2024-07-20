@@ -36,7 +36,7 @@ namespace EcommerceMVC.Controllers
             });
             int pageSize = 9;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
-            ViewBag.pageSize = hangHoas.Count()/pageSize;
+            ViewBag.pageSize = (hangHoas.Count()/pageSize)+1;
             ViewBag.pagenumber = pageNumber;
 
             PagedList<HangHoaVM> lst=new PagedList<HangHoaVM>(result, pageNumber, pageSize);
