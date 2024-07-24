@@ -1,21 +1,43 @@
-﻿@model IEnumerable<EcommerceMVC.ViewModels.MenuLoaiVM>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.Razor
+@model IEnumerable<EcommerceMVC.ViewModels.MenuLoaiVM>
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 
 <div class="col-lg-12">
     <div class="mb-3">
         <h4>Danh mục</h4>
         <ul class="list-unstyled fruite-categorie">
+            <li>
             @foreach(var item in Model)
             {
-                <li>
+                
                     <div class="d-flex justify-content-between fruite-name">
-                        <a asp-controller="HangHoa" asp-action="Index" asp-route-loai="@item.MaLoai"><i class="fas fa-apple-alt me-2">
-                            </i>@item.TenLoai
-                        </a>
+                        @{
+                            var user = await UserManager.GetUserAsync(User);
+                            var isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+                        }
+                        @if (isAdmin)
+                        {
+                            <a asp-controller="HomeAdmin" asp-action="DanhMucHangHoa" asp-route-loai="@item.MaLoai">
+                                <i class="fas fa-apple-alt me-2">
+                                </i>@item.TenLoai
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="HangHoa" asp-action="Index" asp-route-loai="@item.MaLoai">
+                                <i class="fas fa-apple-alt me-2">
+                                </i>@item.TenLoai
+                            </a>
+                        }
                         <span>(@item.SoLuong)</span>
                     </div>
-                </li>
-            }        
+                
+            }     
+            </li>
         </ul>
     </div>
 </div>

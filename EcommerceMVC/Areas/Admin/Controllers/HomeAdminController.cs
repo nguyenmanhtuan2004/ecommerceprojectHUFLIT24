@@ -59,7 +59,7 @@ namespace EcommerceMVC.Areas.Admin.Controllers
 
         [Authorize(Roles = "Admin")]
         [Route("Search")]
-        public IActionResult Search(string? query)
+        public IActionResult Search(string? query, int? page)
         {
             var hangHoas = db.HangHoas.AsQueryable();
             if (query != null)
@@ -74,13 +74,20 @@ namespace EcommerceMVC.Areas.Admin.Controllers
                 Hinh = p.Hinh ?? "",
                 TenLoai = p.MaLoaiNavigation.TenLoai
             });
-            return View(result);
+            int pageSize = 9;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            ViewBag.pageSize = (hangHoas.Count() / pageSize) + 1;
+            ViewBag.pagenumber = pageNumber;
+            PagedList<HangHoaThemVM> lst = new PagedList<HangHoaThemVM>(result, pageNumber, pageSize);
+            return View(lst);
         }
         [Authorize(Roles = "Admin")]
         [Route("ThemSanPhamMoi")]
         [HttpGet]
         public IActionResult ThemSanPhamMoi()
         {
+            ViewBag.MaNCC = db.NhaCungCaps.AsEnumerable();
+            ViewBag.MaLoai = db.Loais.AsEnumerable();
             return View();
         }
         [HttpPost]
@@ -88,6 +95,7 @@ namespace EcommerceMVC.Areas.Admin.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ThemSanPhamMoi(HangHoaThemVM model)
         {
+
             if (ModelState.IsValid)
             {
                 var hanghoa = new HangHoa
@@ -117,8 +125,12 @@ namespace EcommerceMVC.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult SuaSanPham(int MaHh)
         {
-            ViewBag.MaHh = MaHh;
-            var hangHoa = db.HangHoas.Find(MaHh);
+            ViewBag.MaHh= MaHh;
+            var hangHoa = db.HangHoas.Include(p => p.MaLoaiNavigation)
+                .Include(p => p.MaNccNavigation)
+                .FirstOrDefault(x=>x.MaHh==MaHh);
+            ViewBag.MaNCC = db.NhaCungCaps.AsEnumerable();
+            ViewBag.MaLoai = db.Loais.AsEnumerable();
             if (hangHoa == null)
             {
                 return View();
@@ -209,6 +221,45 @@ namespace EcommerceMVC.Areas.Admin.Controllers
 
             };*/
             return View(data);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("HoaDon")]
+        public IActionResult HoaDon()
+        {
+            /*var customerId = User.Identity.Name;*/
+            /*var chiTietHds = db.ChiTietHds
+           .Include(ct => ct.MaHhNavigation)
+           .Include(ct => ct.MaHdNavigation)
+           .ToList();*/
+            var groupedOrders = db.ChiTietHds.Include(ct => ct.MaHdNavigation)
+        .AsEnumerable()
+        .GroupBy(o => o.MaHd)
+        .Select(g => new
+        {
+            MaHd = g.Key,
+            Count= g.Sum(o=>o.SoLuong),
+            SoMatHang= g.ToList().Count(),
+            TenKH =g.Max(o=>o.MaHdNavigation.HoTen),
+            TongTien=g.Max(o=>o.DonGia*o.SoLuong-o.GiamGia),
+            Orders = g.ToList()
+        });
+
+            ViewBag.GroupedOrders = groupedOrders;
+            return View();
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("ChiTietHoaDon")]
+        public IActionResult ChiTietHoaDon(int MaHd)
+        {
+            var chiTietHds = db.ChiTietHds
+            .Include(ct => ct.MaHhNavigation)
+            .Include(ct => ct.MaHdNavigation)
+            .Where(ct => ct.MaHd == MaHd)
+            .ToList();
+            return View(chiTietHds);
         }
 
     }

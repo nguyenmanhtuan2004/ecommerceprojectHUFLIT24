@@ -68,10 +68,7 @@ namespace EcommerceMVC.Controllers
                 catch (Exception ex)
                 {
                     var mess = $"{ex.Message} shh";
-                }
-
-
-               
+                } 
 
             }
             return View();

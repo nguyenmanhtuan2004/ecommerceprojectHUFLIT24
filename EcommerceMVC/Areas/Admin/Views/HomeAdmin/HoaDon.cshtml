@@ -1,0 +1,50 @@
+﻿@using EcommerceMVC.Data
+@* @model IEnumerable<HoaDon> *@
+@{
+    ViewData["Title"] = "Lịch sử mua hàng";
+}
+@{
+    var groupedOrders = ViewBag.GroupedOrders as IEnumerable<dynamic>;
+}
+<h2 class="mb-4 text-primary">Danh mục hóa đơn</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Họ Tên</th>
+            <th>Số lượng</th>
+            <th>Tên Khách hàng</th>
+            <th>Số mặt hàng</th>
+            <th>Tổng tiền</th>
+            <th>Xem chi tiết</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var group in groupedOrders)
+{
+        
+            
+            <tr>
+                <td>@group.MaHd</td>
+                <td>@group.Count</td>
+                <td>@group.TenKH</td>
+                <td>@group.SoMatHang</td>
+                <td>@group.TongTien</td>
+                <td>
+                    <a class="m-1 btn btn-primary text-white" asp-action="ChiTietHoaDon" asp-route-MaHd="@group.MaHd">Chi tiết</a>
+                </td>
+            </tr>
+            
+
+            @* @foreach (var item in group.Orders)
+            {
+                <tr >
+                    <td>@item.MaHd</td>
+                    <td>@item.MaHd</td>
+                </tr>
+            } *@
+    
+}
+    </tbody>
+
+</table>
+

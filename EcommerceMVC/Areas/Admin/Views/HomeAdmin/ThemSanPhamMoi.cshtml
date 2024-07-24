@@ -1,4 +1,5 @@
 ﻿@using EcommerceMVC.Areas.Admin.Models.ViewModels;
+@using EcommerceMVC.Data;
 @model HangHoaThemVM
 
 @{
@@ -17,12 +18,16 @@
             <div class="form-item w-100">
                 <label asp-for="MaLoai" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
                 <select asp-for="MaLoai" class="form-control">
-                    <option value=1000>Đồng hồ</option>
+                    @* <option value=1000>Đồng hồ</option>
                     <option value=1004>Nước hoa</option>
                     <option value=1005>Trang sức</option>
                     <option value=1006>Giày</option>
                     <option value=1008>Quần</option>
-                    <option value=1009>Áo</option>
+                    <option value=1009>Áo</option> *@
+                    @foreach (var item in ViewBag.MaLoai as IEnumerable<Loai>)
+                    {
+                        <option value="@item.MaLoai">@item.TenLoai</option>
+                    }
                 </select>
                 <span asp-validation-for="MaLoai" class="text-danger"></span>
             </div>
@@ -49,11 +54,15 @@
             <div class="form-item w-100">
                 <label asp-for="MaNcc" class="form-label my-3 text-primary fw-bold"></label><sup>*</sup>
                 <select asp-for="MaNcc" class="form-control">
-                    <option value="AP">Chanel</option>
+                    @* <option value="AP">Chanel</option>
                     <option value="MO">Louis Vuitton</option>
                     <option value="NK">Gucci</option>
                     <option value="SM">Dior</option>
-                    <option value="SS">Versace</option>
+                    <option value="SS">Versace</option> *@
+                    @foreach (var item in ViewBag.MaNCC as IEnumerable<NhaCungCap>)
+                    {
+                        <option value="@item.MaNcc">@item.TenCongTy</option>
+                    }
                 </select>
                 <span asp-validation-for="MaNcc" class="text-danger"></span>
             </div>

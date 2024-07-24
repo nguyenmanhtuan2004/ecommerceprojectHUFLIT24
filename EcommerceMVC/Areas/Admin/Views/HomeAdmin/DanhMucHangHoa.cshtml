@@ -5,85 +5,98 @@
 @{
     ViewData["Title"] = "Danh mục hàng hóa";
 }
-<div class="">
-    <h2 class="text-primary fw-bold">Danh mục các hàng hóa</h2>
-    <p>
-        <a class="btn btn-primary text-white" asp-action="ThemSanPhamMoi">Thêm hàng hóa mới</a>
-    </p>
-    <table class="table table-striped">
-        <thead>
-            <tr class="rounded" style="background-color:#F5DEB3">
-                <th class="text-primary fw-bold">
-                    Tên hàng hóa
-                </th>
-                <th class="text-primary fw-bold">
-                    Hình
-                </th>
-                <th class="text-primary fw-bold">
-                    Tên loại
-                </th>
-                <th class="text-primary fw-bold">
-                    Đơn giá
-                </th>
-                <th class="text-primary fw-bold">
-                    Chức năng
-                </th>
+<div class="row g-4">
+    <div class="col-lg-3">
+        <div class="row g-4">
+            @await Component.InvokeAsync("MenuLoai")
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="row g-4 justify-content-center">
+            <div class="">
+                <h2 class="text-primary fw-bold">Danh mục các hàng hóa</h2>
+                <p>
+                    <a class="btn btn-primary text-white" asp-action="ThemSanPhamMoi">Thêm hàng hóa mới</a>
+                </p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="rounded" style="background-color:#F5DEB3">
+                            <th class="text-primary fw-bold">
+                                Tên hàng hóa
+                            </th>
+                            <th class="text-primary fw-bold">
+                                Hình
+                            </th>
+                            <th class="text-primary fw-bold">
+                                Tên loại
+                            </th>
+                            <th class="text-primary fw-bold">
+                                Đơn giá
+                            </th>
+                            <th class="text-primary fw-bold">
+                                Chức năng
+                            </th>
 
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int i = 0;
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
 
-            }
-            @foreach (var item in Model)
-            {
-                @* i = i + 1;
-                string cls = "table-success";
-                if (i % 2 == 0)
-                {
-                    cls = "table-secondary";
-                } *@
-                <tr class="">
-                    <td class="text-primary">
-                        @Html.DisplayFor(modelItem => item.TenHH)
-                    </td>
-                    <td class="text-primary">
-                        <img class="img-thumbnail" style="width:6rem" src="~/Hinh/HangHoa/@item.Hinh" />
-                    </td>
-                    <td class="text-primary">
-                        @Html.DisplayFor(modelItem => item.TenLoai)
-                    </td>
-                    <td class="text-primary">
-                        @Html.DisplayFor(modelItem => item.DonGia)
-                    </td>
-                    <td>
-                        <a class="m-1 btn btn-primary text-white" asp-action="SuaSanPham" asp-route-MaHh="@item.MaHh">Sửa</a>
-                        <a class="m-1 btn btn-primary text-white" asp-action="ChiTiet" asp-route-id="@item.MaHh">Chi Tiết</a>
-                        <form asp-action="XoaSanPham" method="post">
-                            <input type="hidden" name="id" value="@item.MaHh" />
-                            <button type="submit" class="m-1 btn btn-primary text-white">Xóa</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <div class="col-12">
-        <div class="pagination d-flex justify-content-center mt-5">
-            @for (var a = 1; a <= ViewBag.pageSize; a++)
-            {
+                        }
+                        @foreach (var item in Model)
+                        {
+                            @* i = i + 1;
+                        string cls = "table-success";
+                        if (i % 2 == 0)
+                        {
+                        cls = "table-secondary";
+                        } *@
+                            <tr class="">
+                                <td class="text-primary">
+                                    @Html.DisplayFor(modelItem => item.TenHH)
+                                </td>
+                                <td class="text-primary">
+                                    <img class="img-thumbnail" style="width:6rem" src="~/Hinh/HangHoa/@item.Hinh" />
+                                </td>
+                                <td class="text-primary">
+                                    @Html.DisplayFor(modelItem => item.TenLoai)
+                                </td>
+                                <td class="text-primary">
+                                    @Html.DisplayFor(modelItem => item.DonGia)
+                                </td>
+                                <td>
+                                    <a class="m-1 btn btn-primary text-white" asp-action="SuaSanPham" asp-route-MaHh="@item.MaHh">Sửa</a>
+                                    <a class="m-1 btn btn-primary text-white" asp-action="ChiTiet" asp-route-id="@item.MaHh">Chi Tiết</a>
+                                    <form asp-action="XoaSanPham" method="post">
+                                        <input type="hidden" name="id" value="@item.MaHh" />
+                                        <button type="submit" class="m-1 btn btn-primary text-white">Xóa</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="col-12">
+                    <div class="pagination d-flex justify-content-center mt-5">
+                        @for (var a = 1; a <= ViewBag.pageSize; a++)
+                        {
 
-                if (a == ViewBag.pagenumber)
-                {
-                    <a href="?page=@a" class="active rounded">@a</a>
-                }
-                else
-                {
-                    <a href="?page=@a" class="rounded">@a</a>
-                }
-            }
+                            if (a == ViewBag.pagenumber)
+                            {
+                                <a href="?page=@a" class="active rounded">@a</a>
+                            }
+                            else
+                            {
+                                <a href="?page=@a" class="rounded">@a</a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+    
+
 

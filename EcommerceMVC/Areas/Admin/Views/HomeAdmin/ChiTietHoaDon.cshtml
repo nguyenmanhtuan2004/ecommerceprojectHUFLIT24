@@ -17,20 +17,20 @@
             </tr>
         </thead>
         <tbody>
-            
-                @foreach(var item in Model)
-                {
-                    var a = item.SoLuong * item.DonGia - item.GiamGia;
-                   <tr>
-                        <td>@item.MaHhNavigation.TenHh</td>
-                        <td>@item.MaHdNavigation.NgayDat</td>
-                        <td>@item.DonGia</td>
-                        <td>@item.SoLuong</td>
-                        <td>@item.GiamGia</td>
-                        <td>@a</td>
-                   </tr>
-                }
-               
+
+            @foreach (var item in Model)
+            {
+                var a = item.SoLuong * item.DonGia - item.GiamGia;
+                <tr>
+                    <td>@item.MaHhNavigation.TenHh</td>
+                    <td>@item.MaHdNavigation.NgayDat</td>
+                    <td>@item.DonGia</td>
+                    <td>@item.SoLuong</td>
+                    <td>@item.GiamGia</td>
+                    <td>@a</td>
+                </tr>
+            }
+
             <!-- Thêm các dòng khác tương tự ở đây -->
         </tbody>
     </table>

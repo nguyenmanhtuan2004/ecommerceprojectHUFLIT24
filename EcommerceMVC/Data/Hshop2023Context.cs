@@ -16,22 +16,20 @@ namespace EcommerceMVC.Data
         {
         }
 
-        public virtual DbSet<BanBe> BanBes { get; set; } = null!;
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
+        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; } = null!;
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
+        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
         public virtual DbSet<ChiTietHd> ChiTietHds { get; set; } = null!;
-        public virtual DbSet<ChuDe> ChuDes { get; set; } = null!;
-        public virtual DbSet<GopY> Gopies { get; set; } = null!;
         public virtual DbSet<HangHoa> HangHoas { get; set; } = null!;
         public virtual DbSet<HoaDon> HoaDons { get; set; } = null!;
-        public virtual DbSet<HoiDap> HoiDaps { get; set; } = null!;
         public virtual DbSet<KhachHang> KhachHangs { get; set; } = null!;
         public virtual DbSet<Loai> Loais { get; set; } = null!;
         public virtual DbSet<NhaCungCap> NhaCungCaps { get; set; } = null!;
         public virtual DbSet<NhanVien> NhanViens { get; set; } = null!;
-        public virtual DbSet<PhanCong> PhanCongs { get; set; } = null!;
-        public virtual DbSet<PhanQuyen> PhanQuyens { get; set; } = null!;
-        public virtual DbSet<PhongBan> PhongBans { get; set; } = null!;
         public virtual DbSet<TrangThai> TrangThais { get; set; } = null!;
-        public virtual DbSet<TrangWeb> TrangWebs { get; set; } = null!;
         public virtual DbSet<VChiTietHoaDon> VChiTietHoaDons { get; set; } = null!;
         public virtual DbSet<YeuThich> YeuThiches { get; set; } = null!;
 
@@ -46,38 +44,85 @@ namespace EcommerceMVC.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BanBe>(entity =>
+            modelBuilder.Entity<AspNetRole>(entity =>
             {
-                entity.HasKey(e => e.MaBb)
-                    .HasName("PK_Promotions");
+                entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
+                    .IsUnique()
+                    .HasFilter("([NormalizedName] IS NOT NULL)");
 
-                entity.ToTable("BanBe");
+                entity.Property(e => e.Name).HasMaxLength(256);
 
-                entity.Property(e => e.MaBb).HasColumnName("MaBB");
+                entity.Property(e => e.NormalizedName).HasMaxLength(256);
+            });
 
-                entity.Property(e => e.Email).HasMaxLength(50);
+            modelBuilder.Entity<AspNetRoleClaim>(entity =>
+            {
+                entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
 
-                entity.Property(e => e.HoTen).HasMaxLength(50);
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetRoleClaims)
+                    .HasForeignKey(d => d.RoleId);
+            });
 
-                entity.Property(e => e.MaHh).HasColumnName("MaHH");
+            modelBuilder.Entity<AspNetUser>(entity =>
+            {
+                entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
 
-                entity.Property(e => e.MaKh)
-                    .HasMaxLength(20)
-                    .HasColumnName("MaKH");
+                entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
+                    .IsUnique()
+                    .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
-                entity.Property(e => e.NgayGui)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.Email).HasMaxLength(256);
 
-                entity.HasOne(d => d.MaHhNavigation)
-                    .WithMany(p => p.BanBes)
-                    .HasForeignKey(d => d.MaHh)
-                    .HasConstraintName("FK_QuangBa_HangHoa");
+                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
-                entity.HasOne(d => d.MaKhNavigation)
-                    .WithMany(p => p.BanBes)
-                    .HasForeignKey(d => d.MaKh)
-                    .HasConstraintName("FK_BanBe_KhachHang");
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+
+                entity.Property(e => e.UserName).HasMaxLength(256);
+
+                entity.HasMany(d => d.Roles)
+                    .WithMany(p => p.Users)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "AspNetUserRole",
+                        l => l.HasOne<AspNetRole>().WithMany().HasForeignKey("RoleId"),
+                        r => r.HasOne<AspNetUser>().WithMany().HasForeignKey("UserId"),
+                        j =>
+                        {
+                            j.HasKey("UserId", "RoleId");
+
+                            j.ToTable("AspNetUserRoles");
+
+                            j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
+                        });
+            });
+
+            modelBuilder.Entity<AspNetUserClaim>(entity =>
+            {
+                entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserClaims)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUserLogin>(entity =>
+            {
+                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
+
+                entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserLogins)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUserToken>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserTokens)
+                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<ChiTietHd>(entity =>
@@ -105,64 +150,6 @@ namespace EcommerceMVC.Data
                     .HasForeignKey(d => d.MaHh)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Products");
-            });
-
-            modelBuilder.Entity<ChuDe>(entity =>
-            {
-                entity.HasKey(e => e.MaCd);
-
-                entity.ToTable("ChuDe");
-
-                entity.Property(e => e.MaCd).HasColumnName("MaCD");
-
-                entity.Property(e => e.MaNv)
-                    .HasMaxLength(50)
-                    .HasColumnName("MaNV");
-
-                entity.Property(e => e.TenCd)
-                    .HasMaxLength(50)
-                    .HasColumnName("TenCD");
-
-                entity.HasOne(d => d.MaNvNavigation)
-                    .WithMany(p => p.ChuDes)
-                    .HasForeignKey(d => d.MaNv)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_ChuDe_NhanVien");
-            });
-
-            modelBuilder.Entity<GopY>(entity =>
-            {
-                entity.HasKey(e => e.MaGy);
-
-                entity.ToTable("GopY");
-
-                entity.Property(e => e.MaGy)
-                    .HasMaxLength(50)
-                    .HasColumnName("MaGY");
-
-                entity.Property(e => e.DienThoai).HasMaxLength(50);
-
-                entity.Property(e => e.Email).HasMaxLength(50);
-
-                entity.Property(e => e.HoTen).HasMaxLength(50);
-
-                entity.Property(e => e.MaCd).HasColumnName("MaCD");
-
-                entity.Property(e => e.NgayGy)
-                    .HasColumnType("date")
-                    .HasColumnName("NgayGY")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.NgayTl)
-                    .HasColumnType("date")
-                    .HasColumnName("NgayTL");
-
-                entity.Property(e => e.TraLoi).HasMaxLength(50);
-
-                entity.HasOne(d => d.MaCdNavigation)
-                    .WithMany(p => p.Gopies)
-                    .HasForeignKey(d => d.MaCd)
-                    .HasConstraintName("FK_GopY_ChuDe");
             });
 
             modelBuilder.Entity<HangHoa>(entity =>
@@ -269,34 +256,6 @@ namespace EcommerceMVC.Data
                     .HasConstraintName("FK_HoaDon_TrangThai");
             });
 
-            modelBuilder.Entity<HoiDap>(entity =>
-            {
-                entity.HasKey(e => e.MaHd);
-
-                entity.ToTable("HoiDap");
-
-                entity.Property(e => e.MaHd)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MaHD");
-
-                entity.Property(e => e.CauHoi).HasMaxLength(50);
-
-                entity.Property(e => e.MaNv)
-                    .HasMaxLength(50)
-                    .HasColumnName("MaNV");
-
-                entity.Property(e => e.NgayDua)
-                    .HasColumnType("date")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.TraLoi).HasMaxLength(50);
-
-                entity.HasOne(d => d.MaNvNavigation)
-                    .WithMany(p => p.HoiDaps)
-                    .HasForeignKey(d => d.MaNv)
-                    .HasConstraintName("FK_HoiDap_NhanVien");
-            });
-
             modelBuilder.Entity<KhachHang>(entity =>
             {
                 entity.HasKey(e => e.MaKh)
@@ -386,80 +345,6 @@ namespace EcommerceMVC.Data
                 entity.Property(e => e.MatKhau).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<PhanCong>(entity =>
-            {
-                entity.HasKey(e => e.MaPc);
-
-                entity.ToTable("PhanCong");
-
-                entity.Property(e => e.MaPc).HasColumnName("MaPC");
-
-                entity.Property(e => e.MaNv)
-                    .HasMaxLength(50)
-                    .HasColumnName("MaNV");
-
-                entity.Property(e => e.MaPb)
-                    .HasMaxLength(7)
-                    .IsUnicode(false)
-                    .HasColumnName("MaPB");
-
-                entity.Property(e => e.NgayPc)
-                    .HasColumnType("datetime")
-                    .HasColumnName("NgayPC");
-
-                entity.HasOne(d => d.MaNvNavigation)
-                    .WithMany(p => p.PhanCongs)
-                    .HasForeignKey(d => d.MaNv)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PhanCong_NhanVien");
-
-                entity.HasOne(d => d.MaPbNavigation)
-                    .WithMany(p => p.PhanCongs)
-                    .HasForeignKey(d => d.MaPb)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PhanCong_PhongBan");
-            });
-
-            modelBuilder.Entity<PhanQuyen>(entity =>
-            {
-                entity.HasKey(e => e.MaPq);
-
-                entity.ToTable("PhanQuyen");
-
-                entity.Property(e => e.MaPq).HasColumnName("MaPQ");
-
-                entity.Property(e => e.MaPb)
-                    .HasMaxLength(7)
-                    .IsUnicode(false)
-                    .HasColumnName("MaPB");
-
-                entity.HasOne(d => d.MaPbNavigation)
-                    .WithMany(p => p.PhanQuyens)
-                    .HasForeignKey(d => d.MaPb)
-                    .HasConstraintName("FK_PhanQuyen_PhongBan");
-
-                entity.HasOne(d => d.MaTrangNavigation)
-                    .WithMany(p => p.PhanQuyens)
-                    .HasForeignKey(d => d.MaTrang)
-                    .HasConstraintName("FK_PhanQuyen_TrangWeb");
-            });
-
-            modelBuilder.Entity<PhongBan>(entity =>
-            {
-                entity.HasKey(e => e.MaPb);
-
-                entity.ToTable("PhongBan");
-
-                entity.Property(e => e.MaPb)
-                    .HasMaxLength(7)
-                    .IsUnicode(false)
-                    .HasColumnName("MaPB");
-
-                entity.Property(e => e.TenPb)
-                    .HasMaxLength(50)
-                    .HasColumnName("TenPB");
-            });
-
             modelBuilder.Entity<TrangThai>(entity =>
             {
                 entity.HasKey(e => e.MaTrangThai);
@@ -471,19 +356,6 @@ namespace EcommerceMVC.Data
                 entity.Property(e => e.MoTa).HasMaxLength(500);
 
                 entity.Property(e => e.TenTrangThai).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<TrangWeb>(entity =>
-            {
-                entity.HasKey(e => e.MaTrang);
-
-                entity.ToTable("TrangWeb");
-
-                entity.Property(e => e.TenTrang).HasMaxLength(50);
-
-                entity.Property(e => e.Url)
-                    .HasMaxLength(250)
-                    .HasColumnName("URL");
             });
 
             modelBuilder.Entity<VChiTietHoaDon>(entity =>

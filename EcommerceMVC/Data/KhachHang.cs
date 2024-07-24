@@ -7,7 +7,6 @@ namespace EcommerceMVC.Data
     {
         public KhachHang()
         {
-            BanBes = new HashSet<BanBe>();
             HoaDons = new HashSet<HoaDon>();
             YeuThiches = new HashSet<YeuThich>();
         }
@@ -25,7 +24,6 @@ namespace EcommerceMVC.Data
         public int VaiTro { get; set; }
         public string? RandomKey { get; set; }
 
-        public virtual ICollection<BanBe> BanBes { get; set; }
         public virtual ICollection<HoaDon> HoaDons { get; set; }
         public virtual ICollection<YeuThich> YeuThiches { get; set; }
     }

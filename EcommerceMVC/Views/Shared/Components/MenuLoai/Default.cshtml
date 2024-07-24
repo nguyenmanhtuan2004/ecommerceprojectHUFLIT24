@@ -1,5 +1,9 @@
-﻿@model IEnumerable<EcommerceMVC.ViewModels.MenuLoaiVM>
-
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.Razor
+@model IEnumerable<EcommerceMVC.ViewModels.MenuLoaiVM>
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 <div class="col-lg-12">
     <div class="mb-3">
@@ -9,9 +13,13 @@
             {
                 <li>
                     <div class="d-flex justify-content-between fruite-name">
-                        <a asp-controller="HangHoa" asp-action="Index" asp-route-loai="@item.MaLoai"><i class="fas fa-apple-alt me-2">
-                            </i>@item.TenLoai
-                        </a>
+                       
+                      
+                            <a asp-controller="HangHoa" asp-action="Index" asp-route-loai="@item.MaLoai">
+                                <i class="fas fa-apple-alt me-2">
+                                </i>@item.TenLoai
+                            </a>
+                        
                         <span>(@item.SoLuong)</span>
                     </div>
                 </li>
